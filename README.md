@@ -9,7 +9,9 @@ pip install plot-yar
 ## Descrition:
 
 ```python
-plot_yar.Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, save_as_csv = False, to_latex = False, save_fig=True): 
+plot_yar.Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', 
+x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, 
+save_as_csv = False, to_latex = False, save_fig=True): 
 ```
 
 ### Parameters:
@@ -23,12 +25,12 @@ Y-axis data
 
 
  -  __input_function:__ string.  
-Approximation function.  
-> You could use template functions from dict or your own funcitons: 
-> ```python
+Approximation function.    
+You could use template functions from dict or your own funcitons: 
+ ```python
 input_function = 'linear' 
 fun_examples = {'linear':'a0*x+a1', 'poly_2':'a0*x**2+a1*x+a2', 'poly_3':'a0*x**3+a1*x**2+a2*x+a3','exp':'e^(a0*x+a1)+a2', 'ln':'ln(a0*x+a1)+a2'}
-
+```
  - __plot_name:__ string.  
 Name of your plot (picture)
 
