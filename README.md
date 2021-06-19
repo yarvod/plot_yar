@@ -72,7 +72,7 @@ If True create a folder "pictures" and save plot to .png
 ### Example:
  - in:
 ```python
-import plot_yar.plot_approx as plot_approx
+from plot_yar import plot_approx
 plot_approx([[1,2,3]], [[2,3,5]], 'linear')
 ```
 
