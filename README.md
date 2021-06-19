@@ -29,7 +29,8 @@ Approximation function.
 You could use template functions from dict or your own funcitons: 
  ```python
 input_function = 'linear' 
-fun_examples = {'linear':'a0*x+a1', 'poly_2':'a0*x**2+a1*x+a2', 'poly_3':'a0*x**3+a1*x**2+a2*x+a3','exp':'e^(a0*x+a1)+a2', 'ln':'ln(a0*x+a1)+a2'}
+fun_examples = {'linear':'a0*x+a1', 'poly_2':'a0*x**2+a1*x+a2', 'poly_3':'a0*x**3+a1*x**2+a2*x+a3',
+'exp':'e^(a0*x+a1)+a2', 'ln':'ln(a0*x+a1)+a2'}
 ```
  - __plot_name:__ string.  
 Name of your plot (picture)
@@ -59,9 +60,9 @@ Print crosses error or not?
 
  - __to_latex:__ bool.  (default False)  
 If True save table of estimated coeffs to latex table, you could use this package:
- >```latex
+```latex
  \usepackage{booktabs}
-
+```
 
  - __save_as_csv:__ bool.  (default False)  
 If True save table of estimated coeffs to csv table
