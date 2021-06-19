@@ -7,13 +7,16 @@ import re
 import os
 
 
-def Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = False, print_cross = True, save_as_csv = False, to_latex = False, save_fig=True): 
+def plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, save_as_csv = False, to_latex = False, save_fig=True): 
 
 
     X_data = np.array(X_data)
     Y_data = np.array(Y_data)
 
+    num_of_datasets = np.shape(X_data)[0]
+
     # преобразования функции к виду для питона
+
     fun_ex = {'linear':'a0*x+a1', 'poly_2':'a0*x**2+a1*x+a2', 'poly_3':'a0*x**3+a1*x**2+a2*x+a3','exp':'e^(a0*x+a1)+a2', 'ln':'ln(a0*x+a1)+a2'}
     
     inp = input_function
@@ -27,11 +30,6 @@ def Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_titl
         fun = fun.replace('log', 'np.log10')
         fun = fun.replace('ln', 'np.log')
 
-    # inp = input_function
-    # fun = inp.replace('e', 'np.e')
-    # fun = fun.replace('^', '**')
-    # fun = fun.replace('log', 'np.log10')
-    # fun = fun.replace('ln', 'np.log')
 
     # пропишем функции
     num_coef = len(re.findall('a[0-9]', fun))
@@ -46,36 +44,30 @@ def Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_titl
     approx = eval('approx'+'{}'.format(num_coef))
 
     # используем функцию curve_fit
-    beta_opt1, beta_cov1 = curve_fit(approx, X_data, Y_data, absolute_sigma = Y_absolute_sigma)
+    opt = np.zeros((num_of_datasets,num_coef))
+    cov = np.zeros((num_of_datasets,num_coef,num_coef))
+    for i in range(num_of_datasets):
+        opt[i], cov[i] = curve_fit(approx, X_data[i], Y_data[i], absolute_sigma = Y_absolute_sigma)
 
 
     # коэффициенты
-    a = beta_opt1
+    a = opt
 
     #получим погрешности для коэффициентов
-    sigma_a = np.diag(beta_cov1)
+    sigma_a = np.zeros((num_of_datasets,num_coef))
+    for i in range(num_of_datasets):
+        sigma_a[i] = np.diag(cov[i])
 
     # относистельные погрешности на коэффиценты
     rel_sigma_a = 100* sigma_a/abs(a)
 
     # подсчитаем стандартную ошибку аппроксимации
-    residuals1 = Y_data - approx(X_data,*beta_opt1)
-    fres1 = sum(residuals1**2)
-    S_e = np.sqrt(fres1/len(X_data))
+    S_e = []
+    for i in range(num_of_datasets):
+        residuals1 = Y_data[i] - approx(X_data[i],*opt[i])
+        fres1 = sum(residuals1**2)
+        S_e.append(np.sqrt(fres1/len(X_data[i])))
 
-
-
-    # график
-    fig, ax = plt.subplots(figsize=(10, 6))
-    fig.patch.set_facecolor('white')
-
-
-    # определяем массив точек по оси Ох и строим график аппроксимации
-    dots = np.arange(X_data[0], max(X_data) + 0.0001, 0.01)
-    ax.plot(dots, approx(dots, *beta_opt1), '--', lw = 2)
-
-    # это строит "точками" твои начальные данные
-    ax.scatter(X_data, Y_data, color = 'red', s = 15)
 
     # в легенду запишем функцию аппроксимации с определнными коэффициентами
     if scientific_view == True:
@@ -90,15 +82,38 @@ def Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_titl
     tr1 = '$ y(x) = ' + tr1 + '$'
     # выстроим верный порядок коэффициентов
     order = re.findall('a([0-9])', fun)
-    a_ord = dict(zip(order, a))
-    a_ord = dict(sorted(a_ord.items()))
-    a_ord = tuple(a_ord.values())
+    a_ord = [0 for i in range(num_of_datasets)]
+    for i in range(num_of_datasets):
+        a_ord[i] = dict(zip(order, a[i]))
+        a_ord[i] = dict(sorted(a_ord[i].items()))
+        a_ord[i] = tuple(a_ord[i].values())
 
     # это легенда в графике
     if scientific_view == True:
-        ax.legend([tr1.format(*a_ord)], loc='best', shadow=True) 
+        leg = []
+        for i in range(num_of_datasets):
+            leg.append(tr1.format(*a_ord[i]))
     else:
-        ax.legend([tr1%a_ord], loc='best', shadow=True) 
+        leg = []
+        for i in range(num_of_datasets):
+            leg.append(tr1%a_ord[i])
+
+
+
+
+    # график
+    fig, ax = plt.subplots(figsize=(10, 6))
+    fig.patch.set_facecolor('white')
+
+    for i in range(num_of_datasets):
+        # определяем массив точек по оси Ох и строим график аппроксимации
+        dots = np.arange(X_data[i][0], max(X_data[i]) + 0.0001, 0.01)
+        ax.plot(dots, approx(dots, *opt[i]), '--', lw = 2, label = leg[i])
+
+        # это строит "точками" твои начальные данные
+        ax.scatter(X_data[i], Y_data[i], s = 15)
+
+    plt.legend() 
 
     # название графика и подписи к осям
     ax.set_title(plot_title)
@@ -112,11 +127,8 @@ def Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_titl
 
     # это кресты погрещности, но только вдоль оси Y
     if print_cross == True:
-        plt.errorbar(X_data, Y_data, fmt = 'ro', markersize = '4', yerr = S_e, capsize = 2, elinewidth = 1, capthick = 1, ecolor = 'black')
-
-    # это для пределов отображения графика
-    # plt.xlim (-10, 850)
-    # plt.ylim (-10, 245)
+        for i in range(num_of_datasets):
+            plt.errorbar(X_data[i], Y_data[i], fmt = 'ro', markersize = '4', yerr = S_e[i], capsize = 2, elinewidth = 1, capthick = 1, ecolor = 'black')
 
     # сохраним график в картинку?
     if save_fig == True:
@@ -128,37 +140,39 @@ def Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_titl
 
 
     # вывод коэффициентов и погрешностей
-
+    pd.set_option('display.float_format', lambda x: '{:.3E}'.format(x))
     # названия коэффициентов в порядке ввода их в начале
     names = []
     for i in range(num_coef):
         names.append(r'a_{}'.format(i))
-    # непосредственно создание pandas таблицы
-    param = np.concatenate((np.array(a),np.array(sigma_a), np.array(rel_sigma_a))).reshape(3,num_coef).T
-    pd.set_option('display.float_format', lambda x: '{:.3E}'.format(x))
-    output = pd.DataFrame(param, columns = ['coeffs_values', 'standard error', 'relative se, %'])
-    output.insert(0, value = names, column = 'coeffs')
+    for i in range(num_of_datasets):
+        # непосредственно создание pandas таблицы
+        param = np.concatenate((np.array(a[i]),np.array(sigma_a[i]), np.array(rel_sigma_a[i]))).reshape(3,num_coef).T
+        output = pd.DataFrame(param, columns = ['coeffs_values', 'standard error', 'relative se, %'])
+        output.insert(0, value = names, column = 'coeffs')
 
-    # сохраним в таблицу csv
-    if save_as_csv == True:
-        output.to_csv('output.csv', index = False)
+        # сохраним в таблицу csv
+        if save_as_csv == True:
+            output.to_csv('output_{}.csv'.format(i), index = False)
 
-    # выведем таблицу
-    print('Coeffs table: \n')
-    print(output)
+        # выведем таблицу
+        print('Coeffs table {}: \n'.format(i))
+        print(output)
 
-    # выведем погрешность по оси Oy
-    print('\nStandart_error_Y = {:.3E}'.format(S_e))
+        # выведем погрешность по оси Oy
+        print('\nStandart_error_Y_{} = {:.3E}'.format(i,S_e[i]))
 
-    # проебразование таблицы коэффициентов в латех код
-    if to_latex == True:
-        latex_output = output.to_latex(index = False, position = 'H', caption = 'Коэффициенты аппроксимации', label = 'coeffs_table')
-        print('\n\nLatex code of coeffs table: \n')
-        print(latex_output)
-        with open('coeffs_table.tex', 'w') as tf:
-            tf.write(latex_output)
+        # проебразование таблицы коэффициентов в латех код
+        if to_latex == True:
+            latex_output = output.to_latex(index = False, position = 'H', caption = 'Коэффициенты аппроксимации', label = 'coeffs_table')
+            print('\n\nLatex code of coeffs table {}: \n'.format(i))
+            print(latex_output)
+            with open('coeffs_table_{}.tex'.format(i), 'w') as tf:
+                tf.write(latex_output)
 
     # покажем график
     plt.show()
 
     pass
+
+        
