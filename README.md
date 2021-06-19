@@ -1,4 +1,4 @@
-# This is my package for plotting approximations
+ # This is my package for plotting approximations
 
 ## Installation:
 
@@ -6,73 +6,76 @@
 pip install plot-yar
 ```
 
-## Descrition:
+## Description:
 
 ```python
-plot_yar.plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, save_as_csv = False, to_latex = False, save_fig=True): 
+plot_yar.Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', 
+x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, 
+save_as_csv = False, to_latex = False, save_fig=True): 
 ```
 
 ### Parameters:
 
-> -  __X_data:__ array_like.  
+ -  __X_data:__ array_like.  
 X-axis data
  
 
-> -  __Y_data:__ array_like.  
+ -  __Y_data:__ array_like.  
 Y-axis data
 
 
-> -  __input_function:__ string.  
-Approximation function.  
->> You could use template functions from dict or your own funcitons: 
->> ```python
+ -  __input_function:__ string.  
+Approximation function.    
+You could use template functions from dict or your own funcitons: 
+ ```python
 input_function = 'linear' 
-fun_examples = {'linear':'a0*x+a1', 'poly_2':'a0*x**2+a1*x+a2', 'poly_3':'a0*x**3+a1*x**2+a2*x+a3','exp':'e^(a0*x+a1)+a2', 'ln':'ln(a0*x+a1)+a2'}
-
-> - __plot_name:__ string.  
+fun_examples = {'linear':'a0*x+a1', 'poly_2':'a0*x**2+a1*x+a2', 'poly_3':'a0*x**3+a1*x**2+a2*x+a3',
+'exp':'e^(a0*x+a1)+a2', 'ln':'ln(a0*x+a1)+a2'}
+```
+ - __plot_name:__ string.  
 Name of your plot (picture)
 
 
-> - __plot_title:__ string.  
+ - __plot_title:__ string.  
 Your plot title
 
 
-> - __y_label:__ string.  
+ - __y_label:__ string.  
 Y-axis label
 
-> - __x_label:__ string.  
+ - __x_label:__ string.  
 X-axis label
 
 
-> - __Y_absolute_sigma:__ float or array_like.  
+ - __Y_absolute_sigma:__ float or array_like.  
 Absolute Y-axis data error
 
 
-> - __scientific_view:__ bool. (default True)  
+ - __scientific_view:__ bool. (default True)  
 If True numbers will be written as $6.7 E + 01$ instead $670$
 
 
-> - __print_cross:__ bool.  (default True)  
+ - __print_cross:__ bool.  (default True)  
 Print crosses error or not?
 
-> - __to_latex:__ bool.  (default False)  
+ - __to_latex:__ bool.  (default False)  
 If True save table of estimated coeffs to latex table, you could use this package:
- >```latex
+```latex
  \usepackage{booktabs}
+```
 
-
-> - __save_as_csv:__ bool.  (default False)  
+ - __save_as_csv:__ bool.  (default False)  
 If True save table of estimated coeffs to csv table
 
 
-> - __save_fig:__ bool.  (default True)  
+ - __save_fig:__ bool.  (default True)  
 If True create a folder "pictures" and save plot to .png
 
 
 ### Example:
  - in:
 ```python
-from plot_yar import plot_approx
+import plot_yar.plot_approx
 plot_approx([[1,2,3]], [[2,3,5]], 'linear')
 ```
 
