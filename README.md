@@ -76,7 +76,7 @@ If True create a folder "pictures" and save plot to .png
  - in:
 ```python
 from plot_yar import plot_approx
-plot_approx([[1,2,3]], [[2,3,5]], 'linear')
+plot_approx([[1.1,2.5,3.2],[2,3,4]],[[2,3,5],[5,6,8]], 'linear')
 ```
 
  - out:
@@ -85,10 +85,17 @@ plot_approx([[1,2,3]], [[2,3,5]], 'linear')
 Coeffs table 0: 
 
   coeffs  coeffs_values  standard error  relative se, %
-0    a_0      1.500E+00       8.333E-02       5.556E+00
-1    a_1      3.333E-01       3.889E-01       1.167E+02
+0    a_0      1.327E+00       2.811E-01       2.119E+01
+1    a_1      3.265E-01       1.659E+00       5.080E+02
 
-Standart_error_Y_0 = 2.357E-01
+Standart_error_Y_0 = 4.629E-01
+Coeffs table 1: 
+
+  coeffs  coeffs_values  standard error  relative se, %
+0    a_0      1.500E+00       8.333E-02       5.556E+00
+1    a_1      1.833E+00       8.056E-01       4.394E+01
+
+Standart_error_Y_1 = 2.357E-01
 ```
 
 ![name](plot_name.png)
