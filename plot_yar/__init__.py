@@ -1,1 +1,1 @@
-from .plot import plot_it
+from .plot import Plot_approx
