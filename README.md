@@ -3,7 +3,7 @@
 ## Installation:
 
 ```bash
-pip install plot-yar
+pip install plot_yar
 ```
 
 ## Description:
