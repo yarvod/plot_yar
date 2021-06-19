@@ -6,7 +6,7 @@
 pip install plot-yar
 ```
 
-## Descrition:
+## Description:
 
 ```python
 plot_yar.Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', 
