@@ -9,7 +9,7 @@ pip install plot_yar
 ## Description:
 
 ```python
-plot_yar.Plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', 
+plot_yar.plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', 
 x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, 
 save_as_csv = False, to_latex = False, save_fig=True): 
 ```
