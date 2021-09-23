@@ -16,10 +16,15 @@ def plot_approx(X_data, Y_data, input_function, approx_slice=[], plot_name='plot
 
     if len(approx_slice) == 2:
         for i in range(num_of_datasets):
-            X_data[i] = X_data_ful[i][(X_data_ful[i] > approx_slice[0]) & (X_data_ful[i] < approx_slice[1])]
-            Y_data[i] = Y_data_ful[i][(X_data_ful[i] > approx_slice[0]) & (X_data_ful[i] < approx_slice[1])]
+            X_data[i] = list(X_data_ful[i][(X_data_ful[i] > approx_slice[0]) & (X_data_ful[i] < approx_slice[1])])
+            Y_data[i] = list(Y_data_ful[i][(X_data_ful[i] > approx_slice[0]) & (X_data_ful[i] < approx_slice[1])])
     else:
-        pass
+        X_data = X_data_ful
+        Y_data = Y_data_ful
+
+    X_data = np.array(X_data)
+    Y_data = np.array(Y_data)
+
 
     # преобразования функции к виду для питона
 
