@@ -7,13 +7,19 @@ import re
 import os
 
 
-def plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_title='plot_title', x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, save_as_csv = False, to_latex = False, save_fig=True): 
+def plot_approx(X_data, Y_data, input_function, approx_slice=[], plot_name='plot_name', plot_title='plot_title', x_label='x_label', y_label='y_label', Y_absolute_sigma = 0, scientific_view = True, print_cross = True, save_as_csv = False, to_latex = False, save_fig=True):
 
-
-    X_data = np.array(X_data)
-    Y_data = np.array(Y_data)
+    X_data_ful = np.array(X_data)
+    Y_data_ful = np.array(Y_data)
 
     num_of_datasets = np.shape(X_data)[0]
+
+    if len(approx_slice) == 2:
+        for i in range(num_of_datasets):
+            X_data[i] = X_data_ful[i][(X_data_ful[i] > approx_slice[0]) & (X_data_ful[i] < approx_slice[1])]
+            Y_data[i] = Y_data_ful[i][(X_data_ful[i] > approx_slice[0]) & (X_data_ful[i] < approx_slice[1])]
+    else:
+        pass
 
     # преобразования функции к виду для питона
 
@@ -111,7 +117,7 @@ def plot_approx(X_data, Y_data, input_function, plot_name='plot_name', plot_titl
         ax.plot(dots, approx(dots, *opt[i]), '--', lw = 2, label = leg[i])
 
         # это строит "точками" твои начальные данные
-        ax.scatter(X_data[i], Y_data[i], s = 15)
+        ax.scatter(X_data_ful[i], Y_data_ful[i], s = 15)
 
     plt.legend() 
 
