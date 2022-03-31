@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 	long_description = fh.read()
 
 setup(name='plot_yar',
-      version='0.3',
+      version='0.4',
       description='Plotting_graphs',
       packages=['plot_yar'],
       author_email='vodyar00@mail.ru',
@@ -18,7 +18,7 @@ setup(name='plot_yar',
 	url="https://github.com/yarvod/plot_yar",
 	# Находит все пакеты внутри проекта и объединяет их в дистрибутив.
 	classifiers=[
-		"Programming Language :: Python :: 3.8",
+		"Programming Language :: Python :: 3.9",
 		"License :: OSI Approved :: MIT License",
 		"Operating System :: OS Independent",
 	])

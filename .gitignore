@@ -1,9 +1,19 @@
+# latex
 *.toc
 *.aux
 *.fdb_latexmk
 *.fls
 *.log
 *.gz
+
+# other
 **/.DS_Store
 *.DS_Store
 plot_yar/.DS_Store
+/.idea
+
+# python
+/dist
+/plot_yar.egg-info/*
+/venv
+
